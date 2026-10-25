@@ -1,0 +1,28 @@
+services:
+  backend:
+    build:
+      context: ./sfb-pdf
+      dockerfile: Dockerfile
+    container_name: pdf-studio-backend
+    ports:
+      - "9097:9097"
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  frontend:
+    build:
+      context: ./react-pdf
+      dockerfile: Dockerfile
+      args:
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://localhost:9097/api/pdf}
+    container_name: pdf-studio-frontend
+    ports:
+      - "3003:3000"
+    restart: unless-stopped
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
