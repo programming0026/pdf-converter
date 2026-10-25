@@ -294,5 +294,4 @@ pdf_converter/
 
 - El tamaño máximo de subida es de **100 MB** por archivo y por petición (`application.properties`).
 - La contraseña de *Quitar contraseña* viaja en **Base64** (codificación, no cifrado); usa HTTPS si lo expones fuera de localhost.
-- La conversión de PDF a Word existe en el código pero está comentada/deshabilitada.
 - La URL de la API se define en build con `VITE_API_BASE_URL` (por defecto `http://localhost:9097/api/pdf`). Para cambiarla: `VITE_API_BASE_URL=https://mi-host/api/pdf docker compose up -d --build`. Debe ser accesible desde el navegador, no el hostname interno de Docker.
