@@ -1,4 +1,4 @@
-package com.work.pdf.tools;
+package com.juniverse.pdf.tools;
 
 /**
  *

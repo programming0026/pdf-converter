@@ -1,0 +1,11 @@
+target
+.idea
+.vscode
+.git
+.gitattributes
+.gitignore
+*.iml
+*.log
+logs
+HELP.md
+nbactions.xml

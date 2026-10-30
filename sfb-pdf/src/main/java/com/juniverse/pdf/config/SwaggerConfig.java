@@ -1,4 +1,4 @@
-package com.work.pdf.config;
+package com.juniverse.pdf.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

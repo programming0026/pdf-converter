@@ -1,11 +1,11 @@
-package com.work.pdf.controller;
+package com.juniverse.pdf.controller;
 
-import com.work.pdf.dto.FilesDTO;
-import com.work.pdf.dto.ResponseDTO;
-import com.work.pdf.service.PdfService;
-import com.work.pdf.service.ZipService;
-import com.work.pdf.tools.Angles;
-import com.work.pdf.tools.FileTools;
+import com.juniverse.pdf.dto.FilesDTO;
+import com.juniverse.pdf.dto.ResponseDTO;
+import com.juniverse.pdf.service.PdfService;
+import com.juniverse.pdf.service.ZipService;
+import com.juniverse.pdf.tools.Angles;
+import com.juniverse.pdf.tools.FileTools;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;

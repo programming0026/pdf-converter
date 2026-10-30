@@ -8,7 +8,7 @@
         <version>4.0.1</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.work.pdf</groupId>
+    <groupId>com.juniverse.pdf</groupId>
     <artifactId>sfb-pdf</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <name>sfb-pdf</name>

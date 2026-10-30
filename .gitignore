@@ -1,0 +1,44 @@
+# Java (Maven)
+target/
+dependency-reduced-pom.xml
+*.class
+*.war
+*.ear
+!.mvn/wrapper/maven-wrapper.jar
+
+# Node / Vite
+node_modules/
+dist/
+coverage/
+.vite/
+npm-debug.log*
+
+# Variables de entorno locales con secretos
+.env.*.local
+
+# IDE y sistema operativo
+.idea/
+.vscode/
+.vs/
+*.iml
+*.ipr
+*.iws
+.classpath
+.project
+.settings/
+nbproject/
+nbactions.xml
+nb-configuration.xml
+.DS_Store
+Thumbs.db
+
+# Registros y volcados de la JVM
+*.log
+logs/
+hs_err_pid*
+replay_pid*
+
+# Archivos temporales y variables locales
+*.tmp
+*.bak
+.env.local

@@ -160,7 +160,7 @@ sequenceDiagram
 ## Estructura
 
 ```
-src/main/java/com/work/pdf/
+src/main/java/com/juniverse/pdf/
 ├── SfbPdfApplication.java
 ├── config/SwaggerConfig.java       # metadatos OpenAPI
 ├── controller/PdfController.java   # endpoints REST
@@ -168,6 +168,14 @@ src/main/java/com/work/pdf/
 ├── service/                        # PdfService(+Impl), ZipService(+Impl)
 └── tools/                          # Angles (enum), FileTools
 ```
+
+## Pruebas
+
+```bash
+mvn test
+```
+
+Por ahora solo existe una prueba de humo (`SfbPdfApplicationTests`) que comprueba que el contexto de Spring arranca. Las operaciones sobre PDF no tienen pruebas unitarias propias.
 
 ## Notas
 

@@ -1,6 +1,6 @@
-package com.work.pdf.service;
+package com.juniverse.pdf.service;
 
-import com.work.pdf.dto.FilesDTO;
+import com.juniverse.pdf.dto.FilesDTO;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.OutputStream;

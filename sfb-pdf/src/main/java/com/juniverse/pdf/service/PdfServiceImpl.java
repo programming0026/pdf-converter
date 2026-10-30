@@ -1,8 +1,8 @@
-package com.work.pdf.service;
+package com.juniverse.pdf.service;
 
 //import com.spire.pdf.FileFormat;
 //import com.spire.pdf.PdfDocument;
-import com.work.pdf.dto.FilesDTO;
+import com.juniverse.pdf.dto.FilesDTO;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;

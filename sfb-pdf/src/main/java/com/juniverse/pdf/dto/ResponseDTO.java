@@ -1,4 +1,4 @@
-package com.work.pdf.dto;
+package com.juniverse.pdf.dto;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
