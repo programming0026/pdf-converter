@@ -9,8 +9,6 @@ import io.swagger.v3.oas.models.info.Info;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * The Class SwaggerConfig.
- *
  * @author ajuarez
  */
 @Configuration
@@ -18,9 +16,9 @@ import lombok.extern.slf4j.Slf4j;
 public class SwaggerConfig {
 
     /**
-     * Open API.
+     * Configuración de OpenAPI.
      *
-     * @return the open API
+     * @return configuración de OpenAPI
      */
     @Bean
     OpenAPI openAPI() {
@@ -29,9 +27,9 @@ public class SwaggerConfig {
     }
 
     /**
-     * Gets the contact.
+     * Obtiene los datos de contacto.
      *
-     * @return the contact
+     * @return datos de contacto
      */
     private Contact getContact() {
         return new Contact().name("Pdf")

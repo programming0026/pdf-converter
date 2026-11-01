@@ -1,4 +1,4 @@
-# sfb-pdf · API de PDF Studio
+# sbj-pdf · API de PDF Studio
 
 API REST en **Spring Boot 4 / Java 21** que procesa archivos PDF con [Apache PDFBox](https://pdfbox.apache.org). Es el backend de [PDF Studio](../README.md) y lo consume el frontend [`react-pdf`](../react-pdf/README.md).
 
@@ -23,7 +23,7 @@ API REST en **Spring Boot 4 / Java 21** que procesa archivos PDF con [Apache PDF
 ```bash
 mvn spring-boot:run
 # o
-mvn clean package && java -jar target/sfb-pdf-1.0.0-SNAPSHOT.jar
+mvn clean package && java -jar target/sbj-pdf-1.0.0-SNAPSHOT.jar
 ```
 
 ### Docker
@@ -48,7 +48,7 @@ El `Dockerfile` compila con `maven:3.9.7-amazoncorretto-21` y ejecuta el JAR sob
 | Propiedad | Valor |
 |---|---|
 | `server.port` | `9097` |
-| `spring.application.name` | `sfb-pdf` |
+| `spring.application.name` | `sbj-pdf` |
 | `spring.servlet.multipart.max-file-size` | `100MB` |
 | `spring.servlet.multipart.max-request-size` | `100MB` |
 
@@ -108,10 +108,21 @@ Capas: **controller → service → PDFBox**. Los endpoints que devuelven archiv
 ```mermaid
 classDiagram
     class PdfController
-    class PdfService {
+    class PdfEditService {
         <<interface>>
     }
-    class PdfServiceImpl
+    class PdfTextService {
+        <<interface>>
+    }
+    class PdfConversionService {
+        <<interface>>
+    }
+    class PdfSecurityService {
+        <<interface>>
+    }
+    class PdfOptimizeService {
+        <<interface>>
+    }
     class ZipService {
         <<interface>>
     }
@@ -132,14 +143,23 @@ classDiagram
     }
     class SwaggerConfig
 
-    PdfController --> PdfService
+    PdfController --> PdfEditService
+    PdfController --> PdfTextService
+    PdfController --> PdfConversionService
+    PdfController --> PdfSecurityService
+    PdfController --> PdfOptimizeService
     PdfController --> ZipService
     PdfController ..> Angles
     PdfController ..> FileTools
     PdfController ..> ResponseDTO
-    PdfServiceImpl ..|> PdfService
+    PdfEditServiceImpl ..|> PdfEditService
+    PdfTextServiceImpl ..|> PdfTextService
+    PdfConversionServiceImpl ..|> PdfConversionService
+    PdfSecurityServiceImpl ..|> PdfSecurityService
+    PdfOptimizeServiceImpl ..|> PdfOptimizeService
     ZipServiceImpl ..|> ZipService
-    PdfService ..> FilesDTO
+    PdfEditService ..> FilesDTO
+    PdfConversionService ..> FilesDTO
     ZipService ..> FilesDTO
 ```
 
@@ -147,7 +167,7 @@ classDiagram
 sequenceDiagram
     participant C as Cliente
     participant Ctl as PdfController
-    participant S as PdfService
+    participant S as PdfEditService
     participant Z as ZipService
 
     C->>Ctl: POST /split/document (file, sizePerDocument)
@@ -161,11 +181,17 @@ sequenceDiagram
 
 ```
 src/main/java/com/juniverse/pdf/
-├── SfbPdfApplication.java
+├── SbjPdfApplication.java
 ├── config/SwaggerConfig.java       # metadatos OpenAPI
 ├── controller/PdfController.java   # endpoints REST
 ├── dto/                            # FilesDTO, ResponseDTO<T>
-├── service/                        # PdfService(+Impl), ZipService(+Impl)
+├── service/                        # un servicio por capacidad (interfaz + implementación con PDFBox):
+│   ├── PdfEditService              #   rotar, extraer páginas, unir, dividir, marca de agua
+│   ├── PdfTextService              #   extraer texto
+│   ├── PdfConversionService        #   PDF ↔ imágenes
+│   ├── PdfSecurityService          #   quitar contraseña
+│   ├── PdfOptimizeService          #   comprimir
+│   └── ZipService(+Impl)           #   empaquetar varios archivos
 └── tools/                          # Angles (enum), FileTools
 ```
 
@@ -175,11 +201,11 @@ src/main/java/com/juniverse/pdf/
 mvn test
 ```
 
-Por ahora solo existe una prueba de humo (`SfbPdfApplicationTests`) que comprueba que el contexto de Spring arranca. Las operaciones sobre PDF no tienen pruebas unitarias propias.
+`SbjPdfApplicationTests` comprueba que el contexto de Spring arranca y `PdfServicesTest` prueba cada servicio con PDF generados en memoria (texto, rotación, extracción, unión, división, conversión a imagen, compresión, contraseña y marca de agua).
 
 ## Notas
 
-- Las páginas `start`/`end` se pasan tal cual al servicio; consulta `PdfServiceImpl` para el manejo de rangos fuera de límite.
+- Las páginas `start`/`end` se pasan tal cual al servicio; consulta `PdfEditServiceImpl` y `PdfTextServiceImpl` para el manejo de rangos fuera de límite.
 - La compresión recomprime las imágenes embebidas como JPEG de menor calidad, por lo que es con pérdida.
 - La conversión PDF → Word (`/converter/word`) está comentada y no se expone.
 - La contraseña de `/remove` va en Base64 (solo codificación); usa HTTPS fuera de entornos locales.

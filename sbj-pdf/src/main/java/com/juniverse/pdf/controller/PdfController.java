@@ -2,7 +2,11 @@ package com.juniverse.pdf.controller;
 
 import com.juniverse.pdf.dto.FilesDTO;
 import com.juniverse.pdf.dto.ResponseDTO;
-import com.juniverse.pdf.service.PdfService;
+import com.juniverse.pdf.service.PdfConversionService;
+import com.juniverse.pdf.service.PdfEditService;
+import com.juniverse.pdf.service.PdfOptimizeService;
+import com.juniverse.pdf.service.PdfSecurityService;
+import com.juniverse.pdf.service.PdfTextService;
 import com.juniverse.pdf.service.ZipService;
 import com.juniverse.pdf.tools.Angles;
 import com.juniverse.pdf.tools.FileTools;
@@ -14,8 +18,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -37,20 +41,22 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequestMapping("/api/pdf")
 @Slf4j
+@RequiredArgsConstructor
 public class PdfController {
 
-    @Autowired
-    private PdfService pdfService;
-
-    @Autowired
-    private ZipService zipService;
+    private final PdfEditService pdfEditService;
+    private final PdfTextService pdfTextService;
+    private final PdfConversionService pdfConversionService;
+    private final PdfSecurityService pdfSecurityService;
+    private final PdfOptimizeService pdfOptimizeService;
+    private final ZipService zipService;
 
     @PostMapping(path = "/extract/text", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public ResponseEntity<ResponseDTO<String>> extractText(@RequestParam(name = "file") MultipartFile file) {
         log.info("Type: {}", file.getContentType());
         ResponseDTO<String> response = new ResponseDTO<>();
-        String text = pdfService.extractText(file);
+        String text = pdfTextService.extractText(file);
         response.setContent(text);
         response.setMessage(HttpStatus.OK.getReasonPhrase());
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -63,7 +69,7 @@ public class PdfController {
             @RequestParam(name = "end") Integer endPage) {
         log.info("Type: {}", file.getContentType());
         ResponseDTO<String> response = new ResponseDTO<>();
-        String text = pdfService.extractText(file, startPage, endPage);
+        String text = pdfTextService.extractText(file, startPage, endPage);
         response.setContent(text);
         response.setMessage(HttpStatus.OK.getReasonPhrase());
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -78,7 +84,7 @@ public class PdfController {
         String out = FileTools.getExtension(file.getOriginalFilename(), "_rotate.pdf");
         response.setContentType(MediaType.APPLICATION_PDF_VALUE);
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + out + "\"");
-        pdfService.rotate(file, response.getOutputStream(), angle.getDegree());
+        pdfEditService.rotate(file, response.getOutputStream(), angle.getDegree());
     }
 
     @PostMapping(path = "/rotate/pages", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = {MediaType.APPLICATION_PDF_VALUE})
@@ -92,7 +98,7 @@ public class PdfController {
         String out = FileTools.getExtension(file.getOriginalFilename(), "_rotate.pdf");
         response.setContentType(MediaType.APPLICATION_PDF_VALUE);
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + out + "\"");
-        pdfService.rotate(file, response.getOutputStream(), angle.getDegree(), startPage, endPage);
+        pdfEditService.rotate(file, response.getOutputStream(), angle.getDegree(), startPage, endPage);
     }
 
     @PostMapping(path = "/extract/document/pages", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = {MediaType.APPLICATION_PDF_VALUE})
@@ -105,7 +111,7 @@ public class PdfController {
         String out = FileTools.getExtension(file.getOriginalFilename(), "_extract.pdf");
         response.setContentType(MediaType.APPLICATION_PDF_VALUE);
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + out + "\"");
-        pdfService.extractPages(file, response.getOutputStream(), startPage, endPage);
+        pdfEditService.extractPages(file, response.getOutputStream(), startPage, endPage);
     }
 
     @PostMapping(path = "/converter/image-to-pdf", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = {MediaType.APPLICATION_PDF_VALUE})
@@ -116,7 +122,7 @@ public class PdfController {
         String out = FileTools.getExtension(file.getOriginalFilename(), "_converter.pdf");
         response.setContentType(MediaType.APPLICATION_PDF_VALUE);
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + out + "\"");
-        pdfService.imageToPdf(file, response.getOutputStream());
+        pdfConversionService.imageToPdf(file, response.getOutputStream());
     }
 
     @PostMapping(path = "/merge/document", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = {MediaType.APPLICATION_PDF_VALUE})
@@ -128,19 +134,8 @@ public class PdfController {
         String out = "files_merge.pdf";
         response.setContentType(MediaType.APPLICATION_PDF_VALUE);
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + out + "\"");
-        pdfService.merge(files, response.getOutputStream());
+        pdfEditService.merge(files, response.getOutputStream());
     }
-
-    /*@PostMapping(path = "/converter/word", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = {"application/vnd.openxmlformats-officedocument.wordprocessingml.document"})
-    @ResponseBody
-    public void converterPdfToWord(
-            @RequestParam(name = "file") MultipartFile file,
-            HttpServletResponse response) throws IOException {
-        String out = FileTools.getExtension(file.getOriginalFilename(), "_converter.docx");
-        response.setContentType("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
-        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + out + "\"");
-        pdfService.pdfToWord(file, response.getOutputStream());
-    }*/
 
     @PostMapping(path = "/split/document", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = {MediaType.APPLICATION_OCTET_STREAM_VALUE})
     @ResponseBody
@@ -148,7 +143,7 @@ public class PdfController {
             @RequestParam(name = "sizePerDocument", defaultValue = "1048576") Integer size,
             HttpServletResponse response) throws IOException {
         log.info("Type: {}", file.getContentType());
-        List<FilesDTO> pdfs = pdfService.split(file, size);
+        List<FilesDTO> pdfs = pdfEditService.split(file, size);
 
         String out = FileTools.getExtension(file.getOriginalFilename(), "_split.zip");
         response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
@@ -164,7 +159,7 @@ public class PdfController {
         String out = FileTools.getExtension(file.getOriginalFilename(), "_compress.pdf");
         response.setContentType(MediaType.APPLICATION_PDF_VALUE);
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + out + "\"");
-        pdfService.compress(file, response.getOutputStream());
+        pdfOptimizeService.compress(file, response.getOutputStream());
     }
 
     @PostMapping(path = "/remove", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = {MediaType.APPLICATION_PDF_VALUE})
@@ -176,7 +171,7 @@ public class PdfController {
         String out = FileTools.getExtension(file.getOriginalFilename(), "_rm_pwd.pdf");
         response.setContentType(MediaType.APPLICATION_PDF_VALUE);
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + out + "\"");
-        pdfService.removePassword(file, response.getOutputStream(), new String(Base64.getDecoder().decode(password)));
+        pdfSecurityService.removePassword(file, response.getOutputStream(), new String(Base64.getDecoder().decode(password)));
     }
 
     @PostMapping(path = "/converter/pdf-to-image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = {MediaType.APPLICATION_OCTET_STREAM_VALUE})
@@ -185,7 +180,7 @@ public class PdfController {
             @RequestParam(name = "dpi", defaultValue = "300") Integer dpi,
             HttpServletResponse response) throws IOException {
         log.info("Type: {}", file.getContentType());
-        List<FilesDTO> pdfs = pdfService.pdfToImage(file, dpi);
+        List<FilesDTO> pdfs = pdfConversionService.pdfToImage(file, dpi);
         String out = FileTools.getExtension(file.getOriginalFilename(), "_images.zip");
         response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + out + "\"");
@@ -203,7 +198,7 @@ public class PdfController {
         String out = FileTools.getExtension(file.getOriginalFilename(), "_watermark.pdf");
         response.setContentType(MediaType.APPLICATION_PDF_VALUE);
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + out + "\"");
-        pdfService.watermark(file, response.getOutputStream(), watermarkText, angle.getDegree());
+        pdfEditService.watermark(file, response.getOutputStream(), watermarkText, angle.getDegree());
     }
 
     private class MultipartFilesRequest extends ArrayList<MultipartFile> {

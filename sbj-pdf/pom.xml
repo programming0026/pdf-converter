@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.juniverse.pdf</groupId>
-    <artifactId>sfb-pdf</artifactId>
+    <artifactId>sbj-pdf</artifactId>
     <version>1.0.0-SNAPSHOT</version>
-    <name>sfb-pdf</name>
+    <name>sbj-pdf</name>
     <description>Demo project for Spring Boot</description>
     <url/>
     <licenses>

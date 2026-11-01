@@ -1,6 +1,6 @@
 # react-pdf · Frontend de PDF Studio
 
-Interfaz web de [PDF Studio](../README.md). Muestra un catálogo de herramientas PDF (combinar, dividir, rotar, comprimir…); cada una abre un modal con su formulario, sube los archivos a la API [`sfb-pdf`](../sfb-pdf/README.md) y permite descargar el resultado.
+Interfaz web de [PDF Studio](../README.md). Muestra un catálogo de herramientas PDF (combinar, dividir, rotar, comprimir…); cada una abre un modal con su formulario, sube los archivos a la API [`sbj-pdf`](../sbj-pdf/README.md) y permite descargar el resultado.
 
 ![Inicio](../docs/screenshots/home-light.png)
 
@@ -28,7 +28,7 @@ Interfaz web de [PDF Studio](../README.md). Muestra un catálogo de herramientas
 ## Requisitos
 
 - Node.js 20 o superior
-- API `sfb-pdf` en ejecución (por defecto `http://localhost:9097`)
+- API `sbj-pdf` en ejecución (por defecto `http://localhost:9097`)
 
 ## Configuración
 
@@ -93,7 +93,7 @@ sequenceDiagram
     participant M as ToolModal
     participant T as tool.run (tools.js)
     participant A as pdfApi (api.js)
-    participant B as sfb-pdf API
+    participant B as sbj-pdf API
 
     M->>T: run(pdfApi, values, setProgress)
     T->>A: método del endpoint (FormData)

@@ -15,7 +15,7 @@ export const CATEGORIES = [
 ];
 
 /**
- * Declarative description of every operation exposed by the sfb-pdf API.
+ * Declarative description of every operation exposed by the sbj-pdf API.
  * `fields` drives the generic form renderer in ToolModal.
  */
 export const TOOLS = [

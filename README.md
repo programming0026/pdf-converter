@@ -5,7 +5,7 @@ Aplicación web para **convertir, editar y organizar archivos PDF** desde el nav
 | Módulo | Descripción | Tecnología | Puerto |
 |---|---|---|---|
 | [`react-pdf`](./react-pdf/README.md) | Interfaz web (catálogo de herramientas, modales, tema claro/oscuro) | React 19 · Vite · Tailwind CSS 4 | `3003` (Docker) / `5173` (dev) |
-| [`sfb-pdf`](./sfb-pdf/README.md) | API REST que procesa los PDF | Java 21 · Spring Boot 4 · Apache PDFBox | `9097` |
+| [`sbj-pdf`](./sbj-pdf/README.md) | API REST que procesa los PDF | Java 21 · Spring Boot 4 · Apache PDFBox | `9097` |
 
 ## Capturas de pantalla
 
@@ -76,12 +76,16 @@ flowchart TB
     B -- "localhost:9097/api/pdf" --> J
 ```
 
-### Diagrama de clases — backend (`sfb-pdf`)
+### Diagrama de clases — backend (`sbj-pdf`)
 
 ```mermaid
 classDiagram
     class PdfController {
-        -PdfService pdfService
+        -PdfEditService pdfEditService
+        -PdfTextService pdfTextService
+        -PdfConversionService pdfConversionService
+        -PdfSecurityService pdfSecurityService
+        -PdfOptimizeService pdfOptimizeService
         -ZipService zipService
         +extractText(file) ResponseEntity
         +extractText(file, start, end) ResponseEntity
@@ -96,20 +100,31 @@ classDiagram
         +converterPdfToImage(file, dpi, response)
         +watermark(file, angle, text, response)
     }
-    class PdfService {
+    class PdfEditService {
         <<interface>>
         +rotate(...)
-        +extractText(...) String
-        +merge(files, out)
         +extractPages(...)
-        +imageToPdf(file, out)
+        +merge(files, out)
         +split(file, maxSize) List~FilesDTO~
-        +compress(file, out)
-        +removePassword(file, out, pwd)
-        +pdfToImage(file, dpi) List~FilesDTO~
         +watermark(file, out, text, angle)
     }
-    class PdfServiceImpl
+    class PdfTextService {
+        <<interface>>
+        +extractText(...) String
+    }
+    class PdfConversionService {
+        <<interface>>
+        +imageToPdf(file, out)
+        +pdfToImage(file, dpi) List~FilesDTO~
+    }
+    class PdfSecurityService {
+        <<interface>>
+        +removePassword(file, out, pwd)
+    }
+    class PdfOptimizeService {
+        <<interface>>
+        +compress(file, out)
+    }
     class ZipService {
         <<interface>>
         +zip(files, out)
@@ -137,14 +152,23 @@ classDiagram
         +getExtension(name, ext) String
     }
 
-    PdfController --> PdfService
+    PdfController --> PdfEditService
+    PdfController --> PdfTextService
+    PdfController --> PdfConversionService
+    PdfController --> PdfSecurityService
+    PdfController --> PdfOptimizeService
     PdfController --> ZipService
     PdfController ..> Angles
     PdfController ..> FileTools
     PdfController ..> ResponseDTO
-    PdfServiceImpl ..|> PdfService
+    PdfEditServiceImpl ..|> PdfEditService
+    PdfTextServiceImpl ..|> PdfTextService
+    PdfConversionServiceImpl ..|> PdfConversionService
+    PdfSecurityServiceImpl ..|> PdfSecurityService
+    PdfOptimizeServiceImpl ..|> PdfOptimizeService
     ZipServiceImpl ..|> ZipService
-    PdfService ..> FilesDTO
+    PdfEditService ..> FilesDTO
+    PdfConversionService ..> FilesDTO
     ZipService ..> FilesDTO
 ```
 
@@ -206,7 +230,7 @@ sequenceDiagram
     participant M as ToolModal
     participant API as pdfApi (axios)
     participant C as PdfController
-    participant S as PdfServiceImpl
+    participant S as PdfEditServiceImpl
     participant P as PDFBox
 
     U->>App: Click en "Rotar PDF"
@@ -269,7 +293,7 @@ docker compose down
 
 ```bash
 # Backend (Java 21 + Maven)
-cd sfb-pdf
+cd sbj-pdf
 mvn spring-boot:run            # http://localhost:9097
 
 # Frontend (Node 20+)
@@ -287,7 +311,7 @@ pdf_converter/
 ├── docker-compose.yml      # frontend + backend en la red app-network
 ├── docs/screenshots/       # capturas usadas en este README
 ├── react-pdf/              # frontend (React + Vite + Tailwind)
-└── sfb-pdf/                # backend (Spring Boot + PDFBox)
+└── sbj-pdf/                # backend (Spring Boot + PDFBox)
 ```
 
 ## Notas

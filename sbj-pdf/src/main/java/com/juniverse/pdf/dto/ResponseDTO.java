@@ -17,12 +17,12 @@ import lombok.Setter;
 public class ResponseDTO<T> {
 
     /**
-     * The content.
+     * Contenido.
      */
     private T content;
 
     /**
-     * The message.
+     * Mensaje.
      */
     private String message;
 }
