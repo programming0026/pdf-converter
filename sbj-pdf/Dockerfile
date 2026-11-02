@@ -6,7 +6,7 @@ RUN --mount=type=bind,source=pom.xml,target=pom.xml,readonly \
     mvn dependency:go-offline && \
     mvn clean package -Dmaven.test.skip=true
 
-FROM amazoncorretto:21.0.11-alpine3.21
+FROM amazoncorretto:21.0.11-al2023
 ENV TZ=America/Mexico_City
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 COPY --from=build /app/target/*.jar /workspace/app.jar

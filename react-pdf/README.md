@@ -57,7 +57,7 @@ docker build -t pdf-studio-frontend .
 docker run -p 3003:3000 pdf-studio-frontend
 ```
 
-El `Dockerfile` es multi-stage: compila con `node:26.13.0-alpine` y sirve `dist/` con [`serve`](https://github.com/vercel/serve) en el puerto `3000`. Normalmente se levanta con `docker compose up -d --build` desde la raíz (queda en http://localhost:3003).
+El `Dockerfile` es multi-stage: compila con `node:26.13.0-alpine` y sirve `dist/` con `nginx:1.30-alpine` en el puerto `3000`. El contenedor expone `GET /health` (responde `200 ok`) y el `docker-compose.yml` lo usa como `healthcheck`. Normalmente se levanta con `docker compose up -d --build` desde la raíz (queda en http://localhost:3003).
 
 ## Estructura
 

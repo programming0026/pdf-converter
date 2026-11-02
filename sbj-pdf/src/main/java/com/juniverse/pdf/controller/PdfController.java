@@ -39,7 +39,7 @@ import org.springframework.web.multipart.MultipartFile;
  */
 @CrossOrigin(exposedHeaders = "Content-Disposition")
 @RestController
-@RequestMapping("/api/pdf")
+@RequestMapping("/pdf")
 @Slf4j
 @RequiredArgsConstructor
 public class PdfController {

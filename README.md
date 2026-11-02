@@ -23,7 +23,7 @@ Aplicación web para **convertir, editar y organizar archivos PDF** desde el nav
 |---|---|---|
 | ![Modal](docs/screenshots/modal-rotar.png) | ![Archivo](docs/screenshots/modal-rotar-file.png) | ![Resultado](docs/screenshots/modal-rotar-result.png) |
 
-**Documentación interactiva de la API** (Swagger UI en `http://localhost:9097/swagger-ui/index.html`)
+**Documentación interactiva de la API** (Swagger UI en `http://localhost:9097/api/swagger-ui/index.html`)
 
 ![Swagger](docs/screenshots/swagger.png)
 
@@ -57,7 +57,7 @@ flowchart LR
 
     FE -->|"HTTP multipart/form-data<br/>(axios) /api/pdf/*"| BE
     BE --> PDFBOX[(Apache PDFBox)]
-    BE -.->|documentación| SW[Swagger UI<br/>/swagger-ui/index.html]
+    BE -.->|documentación| SW[Swagger UI<br/>/api/swagger-ui/index.html]
 ```
 
 ### Diagrama de despliegue
@@ -69,7 +69,7 @@ flowchart TB
             N["node:26.13.0-alpine<br/>serve -s dist"]
         end
         subgraph C2["Contenedor pdf-studio-backend"]
-            J["amazoncorretto:21-alpine<br/>app.jar (run.sh)"]
+            J["amazoncorretto:21-al2023<br/>app.jar (run.sh)"]
         end
     end
     B([Navegador]) -- "localhost:3003" --> N
@@ -281,7 +281,7 @@ docker compose up -d --build
 |---|---|
 | Frontend | http://localhost:3003 |
 | API | http://localhost:9097/api/pdf |
-| Swagger UI | http://localhost:9097/swagger-ui/index.html |
+| Swagger UI | http://localhost:9097/api/swagger-ui/index.html |
 
 Detener y limpiar:
 
@@ -319,3 +319,7 @@ pdf_converter/
 - El tamaño máximo de subida es de **100 MB** por archivo y por petición (`application.properties`).
 - La contraseña de *Quitar contraseña* viaja en **Base64** (codificación, no cifrado); usa HTTPS si lo expones fuera de localhost.
 - La URL de la API se define en build con `VITE_API_BASE_URL` (por defecto `http://localhost:9097/api/pdf`). Para cambiarla: `VITE_API_BASE_URL=https://mi-host/api/pdf docker compose up -d --build`. Debe ser accesible desde el navegador, no el hostname interno de Docker.
+
+## Licencia
+
+Este proyecto es **contenido premium** de Java Universe y se entrega a las personas con una membresía activa en Patreon bajo la [Licencia de uso personal de Java Universe](LICENSE), que **no es de código abierto**. Puedes estudiarlo, modificarlo y usarlo en tus propios proyectos, incluidos los comerciales y los que desarrolles para un cliente, pero **no puedes compartir, publicar ni revender el código fuente**. Las condiciones completas están en [LICENSE](LICENSE).

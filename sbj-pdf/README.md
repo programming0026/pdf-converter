@@ -35,13 +35,13 @@ docker run -p 9097:9097 pdf-studio-backend
 
 O con todo el proyecto desde la raíz: `docker compose up -d --build`.
 
-El `Dockerfile` compila con `maven:3.9.7-amazoncorretto-21` y ejecuta el JAR sobre `amazoncorretto:21-alpine` mediante `run.sh` (zona horaria `America/Mexico_City`; se pueden pasar opciones JVM con `JAVA_OPTS`).
+El `Dockerfile` compila con `maven:3.9.7-amazoncorretto-21` y ejecuta el JAR sobre `amazoncorretto:21-al2023` mediante `run.sh` (zona horaria `America/Mexico_City`; se pueden pasar opciones JVM con `JAVA_OPTS`).
 
 | Recurso | URL |
 |---|---|
 | API | http://localhost:9097/api/pdf |
-| Swagger UI | http://localhost:9097/swagger-ui/index.html |
-| OpenAPI JSON | http://localhost:9097/v3/api-docs |
+| Swagger UI | http://localhost:9097/api/swagger-ui/index.html |
+| OpenAPI JSON | http://localhost:9097/api/v3/api-docs |
 
 ## Configuración (`application.properties`)
 
