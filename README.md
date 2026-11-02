@@ -66,7 +66,7 @@ flowchart LR
 flowchart TB
     subgraph Host["Equipo local (Docker Desktop)"]
         subgraph C1["Contenedor pdf-studio-frontend"]
-            N["node:26-alpine<br/>serve -s dist"]
+            N["node:26.13.0-alpine<br/>serve -s dist"]
         end
         subgraph C2["Contenedor pdf-studio-backend"]
             J["amazoncorretto:21-alpine<br/>app.jar (run.sh)"]

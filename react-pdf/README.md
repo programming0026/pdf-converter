@@ -27,7 +27,7 @@ Interfaz web de [PDF Studio](../README.md). Muestra un catálogo de herramientas
 
 ## Requisitos
 
-- Node.js 20 o superior
+- Node.js 22.23.4, 24.22.2 o 26.13.0 (o superior)
 - API `sbj-pdf` en ejecución (por defecto `http://localhost:9097`)
 
 ## Configuración
@@ -57,7 +57,7 @@ docker build -t pdf-studio-frontend .
 docker run -p 3003:3000 pdf-studio-frontend
 ```
 
-El `Dockerfile` es multi-stage: compila con `node:26-alpine` y sirve `dist/` con [`serve`](https://github.com/vercel/serve) en el puerto `3000`. Normalmente se levanta con `docker compose up -d --build` desde la raíz (queda en http://localhost:3003).
+El `Dockerfile` es multi-stage: compila con `node:26.13.0-alpine` y sirve `dist/` con [`serve`](https://github.com/vercel/serve) en el puerto `3000`. Normalmente se levanta con `docker compose up -d --build` desde la raíz (queda en http://localhost:3003).
 
 ## Estructura
 
