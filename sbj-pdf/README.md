@@ -23,7 +23,7 @@ API REST en **Spring Boot 4 / Java 21** que procesa archivos PDF con [Apache PDF
 ```bash
 mvn spring-boot:run
 # o
-mvn clean package && java -jar target/sbj-pdf-1.0.0-SNAPSHOT.jar
+mvn clean package && java -jar target/sbj-pdf-1.0.1.jar
 ```
 
 ### Docker

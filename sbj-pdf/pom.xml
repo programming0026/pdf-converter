@@ -10,13 +10,13 @@
     </parent>
     <groupId>com.juniverse.pdf</groupId>
     <artifactId>sbj-pdf</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.1</version>
     <name>sbj-pdf</name>
     <description>Demo project for Spring Boot</description>
     <url/>
     <licenses>
         <license>
-            <name>Licencia de uso personal de Java Universe 1.0 (LicenseRef-JavaUniverse-Personal-1.0)</name>
+            <name>Licencia de uso personal de Java Universe 1.1 (LicenseRef-JavaUniverse-Personal-1.1)</name>
             <distribution>manual</distribution>
             <comments>No es una licencia de código abierto. Ver el archivo LICENSE en la raíz del repositorio.</comments>
         </license>

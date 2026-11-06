@@ -22,7 +22,7 @@ public class SwaggerConfig {
      */
     @Bean
     OpenAPI openAPI() {
-        return new OpenAPI().info(new Info().title("Pdf").version("1.0.0")
+        return new OpenAPI().info(new Info().title("Pdf").version("1.0.1")
                 .description("Aplicacion para archivos pdf").contact(getContact()));
     }
 
