@@ -2,7 +2,7 @@ package com.juniverse.pdf.tools;
 
 /**
  *
- * @author linux
+ * @author Java Universe
  */
 public final class FileTools {
     

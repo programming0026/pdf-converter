@@ -2,7 +2,7 @@ package com.juniverse.pdf.tools;
 
 /**
  *
- * @author linux
+ * @author Java Universe
  */
 public enum Angles {
     DEGREE_45(45),

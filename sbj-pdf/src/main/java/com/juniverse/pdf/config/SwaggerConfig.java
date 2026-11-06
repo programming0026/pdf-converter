@@ -9,7 +9,7 @@ import io.swagger.v3.oas.models.info.Info;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * @author ajuarez
+ * @author Java Universe
  */
 @Configuration
 @Slf4j
@@ -32,8 +32,7 @@ public class SwaggerConfig {
      * @return datos de contacto
      */
     private Contact getContact() {
-        return new Contact().name("Pdf")
-                .url("https://www.mypage.com/")
-                .email("pdf@mail.com");
+        return new Contact().name("Java Universe")
+                .url("https://github.com/programming0026");
     }
 }

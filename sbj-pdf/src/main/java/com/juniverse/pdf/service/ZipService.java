@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  *
- * @author linux
+ * @author Java Universe
  */
 public interface ZipService {
 

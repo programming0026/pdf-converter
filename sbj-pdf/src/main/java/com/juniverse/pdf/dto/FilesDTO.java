@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 /**
  *
- * @author linux
+ * @author Java Universe
  */
 @Setter
 @Getter

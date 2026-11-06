@@ -7,7 +7,7 @@ import lombok.Setter;
 
 /**
  *
- * @author AJO
+ * @author Java Universe
  * @param <T>
  */
 @Getter
